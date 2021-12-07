@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "919032768909",
+    "project_id": "provider-login-c7752",
+    "storage_bucket": "provider-login-c7752.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919032768909:android:161ca98b1c8baccbb3b5c4",
+        "android_client_info": {
+          "package_name": "com.example.statemanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919032768909-qkednle9shnk1h55ih3pqdap8l6mi5nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3Ro2WWdww-6y1omFdZ-br47gybsBe-Cc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919032768909-qkednle9shnk1h55ih3pqdap8l6mi5nb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
