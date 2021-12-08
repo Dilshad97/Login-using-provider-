@@ -19,6 +19,7 @@ class ProviderState extends ChangeNotifier {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
+  /// SIGN UP USER
   Future<bool> signUpUser(
     String email,
     String password,
@@ -41,9 +42,10 @@ class ProviderState extends ChangeNotifier {
         _email = userCredential.user.email;
         _name = userCredential.user.displayName;
 
+        /// ADDING USER CREDENTIAL TO FIREBASE STORAGE
+
         CollectionReference users =
             FirebaseFirestore.instance.collection('users');
-
         await users
             .doc(getUid)
             .set({
@@ -67,6 +69,7 @@ class ProviderState extends ChangeNotifier {
   File _image;
   FirebaseStorage storage = FirebaseStorage.instance;
 
+  /// IAGE PICKING FROM CAMERA
   Future<File> imgFromCamera() async {
     File image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50);
@@ -91,6 +94,7 @@ class ProviderState extends ChangeNotifier {
     }
   }
 
+  /// IMAGE PICKING FROM GALLERY
   Future<File> imgFromGallery() async {
     File image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 50);
@@ -112,6 +116,7 @@ class ProviderState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// LOGIN USER
   Future<bool> loginUser(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -128,5 +133,30 @@ class ProviderState extends ChangeNotifier {
       print(e);
       return false;
     }
+  }
+
+  /// RESEt PASWWORD
+
+  Future<void> resePassword(resetemailcontroller) async {
+    FirebaseAuth firebaseUser = FirebaseAuth.instance;
+    try {
+      await firebaseUser.sendPasswordResetEmail(email: resetemailcontroller);
+    } on FirebaseException catch (e) {
+      print("////ERROR  MAIL NOT SENT$e");
+    }
+    notifyListeners();
+  }
+
+  /// RESET EMAIL
+  Future<void> resetEmailAddress(
+      String newEmail, String oldEmail, String password) async {
+    FirebaseAuth _authInstance = FirebaseAuth.instance;
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    var authResult = await _authInstance.signInWithEmailAndPassword(
+        email: oldEmail, password: password);
+    await authResult.user.updateEmail(newEmail);
+    await users.doc(authResult.user.uid).update({'email': newEmail});
   }
 }

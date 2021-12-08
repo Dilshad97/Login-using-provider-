@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statemanagement/Provider/provider_state.dart';
@@ -47,7 +46,6 @@ class ProviderDashboard extends StatelessWidget {
                   Map<String, dynamic> data = snapshot.data.data();
 
                   print('DATA //////$data');
-                  // hsdksjdhfashgdfhgasdghfsadfghj
                   return Column(
                     children: [
                       Text(

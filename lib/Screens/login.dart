@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,7 @@ class ProviderLogin extends StatefulWidget {
 class _ProviderLoginState extends State<ProviderLogin> {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
+  TextEditingController resetemailcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +76,25 @@ class _ProviderLoginState extends State<ProviderLogin> {
                       ),
                     ),
                     HeightBox(20),
-
-                    // GestureDetector(onTap: (){
-                    //   Get.to(ForgotPassword());
-                    // },
-                    //   child: Text("Forgot Password ? Reset Now",style: TextStyle(color: Colors.white),),),
-
+                    GestureDetector(
+                      onTap: () {
+                        _showAlertPasswordDialog();
+                      },
+                      child: Text(
+                        "Forgot Password ? Reset Now",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    HeightBox(20),
+                    GestureDetector(
+                      onTap: () {
+                        _showAlerEmailtDialog();
+                      },
+                      child: Text(
+                        "Forgot Email ? Reset Now",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
                     HeightBox(10),
                     GestureDetector(
                         onTap: () async {
@@ -144,5 +160,84 @@ class _ProviderLoginState extends State<ProviderLogin> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void _showAlertPasswordDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reset password'),
+          content: TextField(
+            controller: resetemailcontroller,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.transparent,
+                hintText: "Enter your email"),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                ProviderState _providerState =
+                    Provider.of<ProviderState>(context, listen: false);
+                _providerState.resePassword(resetemailcontroller.text);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAlerEmailtDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reset password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: resetemailcontroller,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    hintText: "Enter your email"),
+              ),
+              TextField(
+                controller: resetemailcontroller,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    hintText: "Enter your old password"),
+              ),
+              TextField(
+                controller: resetemailcontroller,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    hintText: "Enter your new password"),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ProviderState _providerState;
+
+  @override
+  void initState() {
+    super.initState();
+    // _providerState = Provider.of<ProviderState>(context, listen: false);
   }
 }
