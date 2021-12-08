@@ -52,14 +52,18 @@ class ProviderDashboard extends StatelessWidget {
                     children: [
                       Text(
                           "Full Name: ${data['firstname']} ${data['lastname']}"),
-                      data['img']==null?CircleAvatar(
-                        radius: 30,
-                        child: Text(data['firstname'].substring(0,1).toUpperCase()),
-                      ):CircleAvatar(
-                        radius: 80,
-                        backgroundImage: FileImage(File(data['img'])),
-                      )
-                          // child: Image(image: FileImage(File(data['img'])))),
+                      data['img'] == null
+                          ? CircleAvatar(
+                              radius: 30,
+                              child: Text(data['firstname']
+                                  .substring(0, 1)
+                                  .toUpperCase()),
+                            )
+                          : CircleAvatar(
+                              radius: 80,
+                              backgroundImage: FileImage(File(data['img'])),
+                            )
+                      // child: Image(image: FileImage(File(data['img'])))),
                     ],
                   );
                 }

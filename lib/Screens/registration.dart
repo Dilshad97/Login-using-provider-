@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,10 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
   final TextEditingController emailc = TextEditingController();
   final TextEditingController password = TextEditingController();
 
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  FirebaseStorage storage = FirebaseStorage.instance;
+  File _image;
+
   void _signUp(String email, String password, String _image,
       BuildContext context) async {
     ProviderState _providerState =
@@ -37,25 +44,23 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
     }
   }
 
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  void _uploadCamersPic() async {
+    ProviderState _providerState =
+        Provider.of<ProviderState>(context, listen: false);
 
-  File _image;
-
-  _imgFromCamera() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
-    print('IMAGE??????////$image');
-    print('_IMAGE////$_image');
+    var cfile = await _providerState.imgFromCamera();
     setState(() {
-      _image = image;
+      _image = cfile;
     });
   }
 
-  _imgFromGallery() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 50);
+  void _uploadgallerypic() async {
+    ProviderState _providerState =
+        Provider.of<ProviderState>(context, listen: false);
+    var gflie = await _providerState.imgFromGallery();
+
     setState(() {
-      _image = image;
+      _image = gflie;
     });
   }
 
@@ -71,15 +76,13 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Photo Library'),
                       onTap: () {
-                        _imgFromGallery();
-                        Navigator.of(context).pop();
+                        _uploadgallerypic();
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
                     title: new Text('Camera'),
                     onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
+                      _uploadCamersPic();
                     },
                   ),
                 ],
@@ -107,9 +110,7 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            _image.path == null
-                                ? 'ulpad imag'
-                                : _showPicker(context);
+                            _showPicker(context);
                           },
                           child: CircleAvatar(
                             radius: 55,
@@ -290,18 +291,4 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
           )).pLTRB(20, 0, 0, 15),
         ));
   }
-
-// Future<void> addUser() async{
-//   // Call the user's CollectionReference to add a new user
-//  await users.doc(FirebaseAuth.instance.currentUser.uid)
-//       .set({
-//         'firstname': firstn.text,
-//         'email Add': emailc.text,
-//         'lastname': lastn.text
-//       }
-//       )
-//       .then((value) => print("User Added"))
-//       .catchError((error) => print("Failed to add user: $error"));
-//
-// }
 }
