@@ -19,7 +19,7 @@ class ProviderState extends ChangeNotifier {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// SIGN UP USER
+  /// SIGN UP USER INTO FIREBASE_AUTH
   Future<bool> signUpUser(
     String email,
     String password,
@@ -69,7 +69,7 @@ class ProviderState extends ChangeNotifier {
   File _image;
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  /// IAGE PICKING FROM CAMERA
+  /// IMAGE PICKING FROM CAMERA
   Future<File> imgFromCamera() async {
     File image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50);
@@ -148,15 +148,18 @@ class ProviderState extends ChangeNotifier {
   }
 
   /// RESET EMAIL
-  Future<void> resetEmailAddress(
-      String newEmail, String oldEmail, String password) async {
+  Future<void> resetEmailAddress(String newEmail, String oldEmail, String password) async {
     FirebaseAuth _authInstance = FirebaseAuth.instance;
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-    var authResult = await _authInstance.signInWithEmailAndPassword(
-        email: oldEmail, password: password);
-    await authResult.user.updateEmail(newEmail);
-    await users.doc(authResult.user.uid).update({'email': newEmail});
+    var authResult = await _authInstance.signInWithEmailAndPassword(email: oldEmail, password: password);
+    try {
+      await authResult.user.updateEmail(newEmail);
+      await users.doc(authResult.user.uid).update({'email': newEmail});
+    }on FirebaseException catch(e){
+      print('/// EMAIL RESET$e');
+    }
+
   }
 }

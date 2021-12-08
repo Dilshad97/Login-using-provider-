@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +15,8 @@ class _ProviderLoginState extends State<ProviderLogin> {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   TextEditingController resetemailcontroller = TextEditingController();
+  TextEditingController newemailcontroller = TextEditingController();
+  TextEditingController oldemailcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +182,7 @@ class _ProviderLoginState extends State<ProviderLogin> {
                 ProviderState _providerState =
                     Provider.of<ProviderState>(context, listen: false);
                 _providerState.resePassword(resetemailcontroller.text);
+                Navigator.pop(context);
               },
             ),
           ],
@@ -200,32 +201,37 @@ class _ProviderLoginState extends State<ProviderLogin> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: resetemailcontroller,
+                controller: newemailcontroller,
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.transparent,
-                    hintText: "Enter your email"),
+                    hintText: "Enter your new email"),
               ),
               TextField(
-                controller: resetemailcontroller,
+                controller: oldemailcontroller,
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.transparent,
-                    hintText: "Enter your old password"),
+                    hintText:"Enter your old email"),
               ),
               TextField(
-                controller: resetemailcontroller,
+                controller: pass,
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.transparent,
-                    hintText: "Enter your new password"),
+                    hintText:  "Enter your password"),
               ),
             ],
           ),
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),
-              onPressed: () {},
+              onPressed: () {
+                ProviderState _providerState =
+                Provider.of<ProviderState>(context, listen: false);
+                _providerState.resetEmailAddress(newemailcontroller.text, oldemailcontroller.text, pass.text);
+                Navigator.pop(context);
+              },
             ),
           ],
         );
