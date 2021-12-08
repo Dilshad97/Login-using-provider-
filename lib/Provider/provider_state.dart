@@ -106,11 +106,11 @@ class ProviderState extends ChangeNotifier {
       var gallery =
           await storage.ref(getUid).child(timekey.toString()).putFile(image);
 
-      print('Galeery images ///////$gallery');
+      print('GALLERY IMAGE///////$gallery');
 
       return image;
     } on FirebaseException catch (error) {
-      print(error);
+      print('///ERROR GALLERY IMAGE NOT LOADED$error');
     }
 
     notifyListeners();
@@ -128,9 +128,10 @@ class ProviderState extends ChangeNotifier {
         _name = userCredential.user.displayName;
         notifyListeners();
       }
+      print('///USER LOG IN SUCCESSFULLY');
       return true;
     } catch (e) {
-      print(e);
+      print('///ERROR USER LOGIN FAILED $e');
       return false;
     }
   }
@@ -141,6 +142,8 @@ class ProviderState extends ChangeNotifier {
     FirebaseAuth firebaseUser = FirebaseAuth.instance;
     try {
       await firebaseUser.sendPasswordResetEmail(email: resetemailcontroller);
+
+      print('///PASSWORD RESET MAIL SENT TO YOUR MAIL');
     } on FirebaseException catch (e) {
       print("////ERROR  MAIL NOT SENT$e");
     }
@@ -148,18 +151,21 @@ class ProviderState extends ChangeNotifier {
   }
 
   /// RESET EMAIL
-  Future<void> resetEmailAddress(String newEmail, String oldEmail, String password) async {
+  Future<void> resetEmailAddress(
+      String newEmail, String oldEmail, String password) async {
     FirebaseAuth _authInstance = FirebaseAuth.instance;
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-    var authResult = await _authInstance.signInWithEmailAndPassword(email: oldEmail, password: password);
+    var authResult = await _authInstance.signInWithEmailAndPassword(
+        email: oldEmail, password: password);
     try {
       await authResult.user.updateEmail(newEmail);
       await users.doc(authResult.user.uid).update({'email': newEmail});
-    }on FirebaseException catch(e){
-      print('/// EMAIL RESET$e');
-    }
 
+      print('///EMAIL RESET SUCCESSFULLY');
+    } on FirebaseException catch (e) {
+      print('/// ERROR EMAIL RESET FAILED$e');
+    }
   }
 }
