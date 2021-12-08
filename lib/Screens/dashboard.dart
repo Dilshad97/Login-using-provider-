@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,8 +48,20 @@ class ProviderDashboard extends StatelessWidget {
 
                   print('DATA //////$data');
 
-                  return Text(
-                      "Full Name: ${data['firstname']} ${data['lastname']}");
+                  return Column(
+                    children: [
+                      Text(
+                          "Full Name: ${data['firstname']} ${data['lastname']}"),
+                      data['img']==null?CircleAvatar(
+                        radius: 30,
+                        child: Text(data['firstname'].substring(0,1).toUpperCase()),
+                      ):CircleAvatar(
+                        radius: 80,
+                        backgroundImage: FileImage(File(data['img'])),
+                      )
+                          // child: Image(image: FileImage(File(data['img'])))),
+                    ],
+                  );
                 }
                 return Text('loading');
               },

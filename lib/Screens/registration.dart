@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:statemanagement/Provider/provider_state.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import 'dashboard.dart';
 import 'login.dart';
 
 class ProviderRegistration extends StatefulWidget {
@@ -21,14 +22,15 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
   final TextEditingController emailc = TextEditingController();
   final TextEditingController password = TextEditingController();
 
-  void _signUp(String email, String password, String _image,BuildContext context) async {
+  void _signUp(String email, String password, String _image,
+      BuildContext context) async {
     ProviderState _providerState =
         Provider.of<ProviderState>(context, listen: false);
     try {
       if (await _providerState.signUpUser(
-          email, password, firstn.text, lastn.text, emailc.text,_image)) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ProviderLogin()));
+          email, password, firstn.text, lastn.text, emailc.text, _image)) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => ProviderDashboard()));
       }
     } catch (e) {
       print(e);
@@ -42,8 +44,8 @@ class _ProviderRegistrationState extends State<ProviderRegistration> {
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50);
-print('IMAGE??????////$image');
-print('_IMAGE////$_image');
+    print('IMAGE??????////$image');
+    print('_IMAGE////$_image');
     setState(() {
       _image = image;
     });
@@ -105,7 +107,9 @@ print('_IMAGE////$_image');
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            _showPicker(context);
+                            _image.path == null
+                                ? 'ulpad imag'
+                                : _showPicker(context);
                           },
                           child: CircleAvatar(
                             radius: 55,
@@ -240,7 +244,8 @@ print('_IMAGE////$_image');
                             Future.delayed(4.seconds,
                                 close); // Removes toast after 2 seconds
                             // RegisterUser();
-                            _signUp(emailc.text, password.text,_image.path,context);
+                            _signUp(emailc.text, password.text, _image.path,
+                                context);
                           },
                           child: "Sign-Up"
                               .text

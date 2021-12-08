@@ -52,6 +52,7 @@ class ProviderState extends ChangeNotifier {
     }
 
     return retval;
+
   }
 
   Future<bool> loginUser(String email, String password) async {
